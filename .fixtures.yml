@@ -1,0 +1,22 @@
+fixtures:
+  repositories:
+    stdlib:
+      repo:   "ssh://git@gitlab.cern.ch:7999/ai/it-puppet-module-stdlib.git"
+      subdir: "code"
+    augeasproviders_core:
+      repo:   "ssh://git@gitlab.cern.ch:7999/ai/it-puppet-module-augeasproviders_core.git"
+      subdir: "code"
+    augeasproviders_sysctl:
+      repo:   "ssh://git@gitlab.cern.ch:7999/ai/it-puppet-module-augeasproviders_sysctl.git"
+      subdir: "code"
+    docker:
+      repo:   "ssh://git@gitlab.cern.ch:7999/ai/it-puppet-module-docker.git"
+      subdir: "code"
+    systemd:
+      repo:   "ssh://git@gitlab.cern.ch:7999/ai/it-puppet-module-systemd.git"
+      subdir: "code"
+    yumrepo_core:
+      repo: "git://github.com/puppetlabs/puppetlabs-yumrepo_core"
+      puppet_version: ">= 6.0.0"
+  symlinks:
+   "thehive": "#{source_dir}"

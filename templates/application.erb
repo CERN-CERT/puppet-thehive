@@ -1,0 +1,285 @@
+# Secret Key
+# The secret key is used to secure cryptographic functions.
+# WARNING: If you deploy your application on several servers, make sure to use the same key.
+play.http.secret.key = "<%= @play_secret_key %>"
+
+# Port number for TheHive server.
+http.port = <%= @port %>
+
+# Elasticsearch
+search {
+  ## Basic configuration
+  # Index name.
+  index = <%= @elasticsearch_index %>
+
+  # ElasticSearch cluster name.
+  cluster = <%= @elasticsearch_cluster_name %>
+
+  # ElasticSearch instance address.
+  host = ["<%= @elasticsearch_host_address %>:<%= @elasticsearch_host_port %>"]
+
+  ## Advanced configuration
+  # Scroll keepalive.
+  keepalive = "<%= @elasticsearch_scroll_keepalive %>"
+  # Scroll page size.
+  pagesize = <%= @elasticsearch_scroll_pagesize %>
+  # Number of shards
+  nbshards = <%= @elasticsearch_shards_count %>
+  # Number of replicas
+  nbreplicas = <%= @elasticsearch_replicas_count %>
+  # Arbitrary settings
+  settings {
+    # Maximum number of nested fields
+    mapping.nested_fields.limit = <%= @elasticsearch_max_nested_fields %>
+  }
+
+  ### XPack SSL configuration
+  <% if @elasticsearch_xpack_enabled == true -%>
+  # Username for XPack authentication
+  search.username = "<%= @elasticsearch_xpack_username %>"
+  # Password for XPack authentication
+  search.password = "<%= @elasticsearch_xpack_password %>"
+  <% end -%>
+  <% if @elasticsearch_ssl_enabled == true -%>
+  # Enable SSL to connect to ElasticSearch
+  search.ssl.enabled = "<%= @elasticsearch_ssl_enabled %>"
+  # Path to certificate authority file
+  search.ssl.ca = "<%= @elasticsearch_certificate_authority_path %>"
+  # Path to certificate file
+  search.ssl.certificate = "<%= @elasticsearch_certificate_path %>"
+  # Path to key file
+  search.ssl.key = "<%= @elasticsearch_ssl_key %>"
+  <% end -%>
+  <% if @elasticsearch_searchguard_enabled == true -%>
+  #)  ### SearchGuard configuration
+  # Path to JKS file containing client certificate
+  search.guard.keyStore.path = "<%= @elasticsearch_searchguard_keystore_path %>"
+  # Password of the keystore
+  search.guard.keyStore.password = "<%= @elasticsearch_searchguard_keystore_password %>"
+  # Path to JKS file containing certificate authorities
+  search.guard.trustStore.path = "<%= @elasticsearch_searchguard_truststore_path %>"
+  ## Password of the truststore
+  search.guard.trustStore.password = "<%= @elasticsearch_searchguard_truststore_password %>"
+  # Enforce hostname verification
+  search.guard.hostVerification = "<%= @elasticsearch_searchguard_host_verification %>"
+  # If hostname verification is enabled, specify if hostname should be resolved
+  search.guard.hostVerificationResolveHostname = "<%= @elasticsearch_searchguard_host_verification_resolve_hostname %>"
+  <% end -%>
+}
+
+# Authentication
+auth {
+  # "provider" parameter contains authentication provider. It can be multi-valued (useful for migration)
+  # available auth types are:
+  # services.LocalAuthSrv : passwords are stored in user entity (in Elasticsearch). No configuration is required.
+  # services.OAuth2Srv : requires adding configuration including the client ID, client secret, and the redirect URL.
+  # ad : use ActiveDirectory to authenticate users. Configuration is under "auth.ad" key
+  # ldap : use LDAP to authenticate users. Configuration is under "auth.ldap" key
+  provider = <%= @auth_providers %>
+
+  # By default, basic authentication is disabled. You can enable it by setting "method.basic" to true.
+  method.basic = "<%= @auth_basic_enabled %>"
+
+
+  <% if @auth_active_directory_enabled == true -%>
+  ad {
+    # The Windows domain name in DNS format. This parameter is required if you do not use
+    # 'serverNames' below.
+    domainFQDN = "<%= @auth_ad_domain_fqdn %>"
+
+    # Optionally you can specify the host names of the domain controllers instead of using 'domainFQDN
+    # above. If this parameter is not set, TheHive uses 'domainFQDN'.
+    serverNames = "<%= @auth_ad_server_names %>"
+
+    # The Windows domain name using short format. This parameter is required.
+    domainName = "<%= @auth_ad_domain_name %>"
+
+    # If 'true', use SSL to connect to the domain controller.
+    useSSL = <%= @auth_ad_use_ssl %>
+  }
+  <% end -%>
+
+  <% if @auth_ldap_enabled == true -%>
+  ldap {
+    # The LDAP server name or address. The port can be specified using the 'host:port'
+    # syntax. This parameter is required if you don't use 'serverNames' below.
+    # serverName = "<%= @auth_ldap_servername %>"
+
+    # If you have multiple LDAP servers, use the multi-valued setting 'serverNames' instead.
+    serverNames = "<%= @auth_ldap_server_names %>"
+
+    # Account to use to bind to the LDAP server. This parameter is required.
+    bindDN = "<%= @auth_ldap_account_bind_dn %>"
+
+    # Password of the binding account. This parameter is required.
+    bindPW = "<%= @auth_ldap_account_bind_pw %>"
+
+    # Base DN to search users. This parameter is required.
+    baseDN = "<%= @auth_ldap_account_base_dn %>"
+
+    # Filter to search user in the directory server. Please note that {0} is replaced
+    # by the actual user name. This parameter is required.
+    filter = "<%= @auth_ldap_filter %>"
+
+    # If 'true', use SSL to connect to the LDAP directory server.
+    useSSL = <%= @auth_ldap_use_ssl %>
+  }
+  <% end -%>
+
+  <% if @auth_oauth2_sso_enabled == true -%>
+  oauth2 {
+    # Client ID for OAuth2.
+    clientId = "<%= @auth_oauth2_client_id %>"
+
+    # Client secret for OAuth2.
+    clientSecret = "<%= @auth_oauth2_secret %>"
+
+    # Client redirect URI for OAuth2.
+    redirectUri = "<%= @auth_oauth2_client_redirect_uri %>"
+
+    # Client response type for OAuth2.
+    responseType = "<%= @auth_oauth2_response_type %>"
+
+    # Grant type used for OAuth2.
+    grantType = "<%= @auth_oauth2_grant_type %>"
+
+    # URL of the authorization server.
+    authorizationUrl = "<%= @auth_oauth2_auth_url %>"
+
+    # URL from where to get the access token.
+    tokenUrl = "<%= @auth_oauth2_token_url %>"
+
+    # User URL used for creating the request header.
+    userUrl = "<%= @auth_oauth2_user_url %>"
+
+    # Scope for OAuth2.
+    scope = "<%= @auth_oauth2_scope %>"
+  }
+
+  sso {
+    # Name of mapping class from user resource to backend user.
+    mapper = "<%= @auth_sso_mapper %>"
+
+    autocreate = <%= @auth_sso_autocreate %>
+
+    defaultRoles = <%= @auth_sso_default_roles %>
+
+    autologin = <%= @auth_sso_autologin %>
+
+    attributes {
+      login = "<%= @auth_sso_login %>"
+      name = "<%= @auth_sso_name %>"
+      groups = "<%= @auth_sso_groups %>"
+    }
+
+    groups {
+      url = "<%= @auth_sso_group_url %>"
+      mappings {
+        <% @auth_sso_mappings.each do |auth_sso_mapping| -%>
+          <%= auth_sso_mapping["auth_sso_mapping_key"] %> = <%= auth_sso_mapping["auth_sso_mapping_permissions"] %>,
+        <% end -%>
+      }
+    }
+  }
+  <% end -%>
+}
+
+# Maximum time between two requests without requesting authentication
+session {
+  warning = "<%= @session_authentication_warning %>"
+  inactivity = "<%= @session_authentication_inactivity %>"
+}
+
+# Max textual content length
+play.http.parser.maxMemoryBuffer = <%= @http_parser_maxmemorybuffer %>
+# Max file size
+play.http.parser.maxDiskBuffer = <%= @http_parser_maxdiskbuffer %>
+
+<% if @cortex_enabled == true -%>
+# Cortex
+# TheHive can connect to one or multiple  Cortex  instances. Give each
+# Cortex instance a name and specify the associated URL.
+#
+play.modules.enabled += connectors.cortex.CortexConnector
+
+cortex {
+  <% @cortex_instances.each do |cortex_instance| -%>
+  "<%= cortex_instance["cortex_server_id"] %>" {
+    url = "<%= cortex_instance["cortex_server_url"] %>"
+    key = "<%= cortex_instance["cortex_server_key"] %>"
+  }
+  <% end -%>
+}
+<% end -%>
+
+<% if @misp_enabled == true -%>
+# MISP
+# TheHive can connect to one or multiple MISP instances. Give each  MISP
+# instance a name and specify the associated Authkey that must  be  used
+# to poll events, the case template that should be used by default  when
+# importing events as well as the tags that must be added to cases  upon
+# import.
+
+# Prior to configuring the integration with a MISP  instance,  you  must
+# enable the MISP connector. This will allow you  to  import  events  to
+# and/or export cases to the MISP instance(s).
+play.modules.enabled += connectors.misp.MispConnector
+
+misp {
+  # Interval between consecutive MISP event imports in hours (h) or
+  # minutes (m).
+  interval = "<%= @misp_interval %>"
+
+  <% @misp_instances.each do |misp_instance| -%>
+  "<%= misp_instance["misp_server_id"] %>" {
+    # MISP connection configuration requires at least an url and a key. The key must
+    # be linked with a sync account on MISP.
+    url = "<%= misp_instance["misp_server_url"] %>"
+    key = "<%= misp_instance["misp_api_key"] %>"
+
+    # Name of the case template in TheHive that shall be used to import
+    # MISP events as cases by default.
+    caseTemplate = "<%= misp_instance["misp_case_template"] %>"
+
+    # Optional tags to add to each observable  imported  from  an  event
+    # available on this instance.
+    tags = ["<%= misp_instance["misp_server_tags"] %>"]
+
+    ## MISP event filters
+    # MISP filters is used to exclude events from the import.
+    # Filter criteria are:
+    # The number of attribute
+    max-attributes = "<%= misp_instance["misp_max_attributes_count"] %>"
+    # The size of its JSON representation
+    max-size = "<%= misp_instance["misp_max_json_size"] %>"
+    # The age of the last publish date
+    max-age = "<%= misp_instance["misp_max_last_publish_date"] %>"
+    # Organization and tags
+    exclusion {
+      organisation = <%= misp_instance["misp_exclusion_organisations"] %>
+      tags = <%= misp_instance["misp_exclusion_tags"] %>
+    }
+
+    <% if misp_instance["misp_ws_enabled"] == true -%>
+    ## HTTP client configuration (SSL and proxy)
+    # Truststore to use to validate the X.509 certificate of the MISP
+    # instance if the default truststore is not sufficient.
+    # Proxy can also be used
+    ws {
+      ssl.trustManager.stores = [ {
+        path = "<%= misp_instance["misp_ws_truststore_path"] %>"
+      } ]
+      proxy {
+        host = "<%= misp_instance["misp_ws_proxy"] %>"
+        port = "<%= misp_instance["misp_ws_port"] %>"
+      }
+    }
+    <% end -%>
+
+    # MISP purpose defines if this instance can be used to import events (ImportOnly), export cases (ExportOnly) or both (ImportAndExport)
+    # Default is ImportAndExport
+    purpose = "<%= misp_instance["misp_purpose"] %>"
+  }
+  <% end -%>
+}
+<% end -%>

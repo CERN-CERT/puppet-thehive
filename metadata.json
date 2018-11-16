@@ -1,0 +1,20 @@
+{
+  "name": "CERNOps-thehive",
+  "version": "0.0.0",
+  "author": "CERNOps",
+  "summary": "This module is responsible for the installation, configuration, and deployment of TheHive application.",
+  "license": "Apache-2.0",
+  "source": "https://gitlab.cern.ch/ai/it-puppet-module-thehive",
+  "dependencies": [
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": ["7"]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": ["7"]
+    }
+  ]
+}

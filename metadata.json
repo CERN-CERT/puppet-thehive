@@ -4,7 +4,7 @@
   "author": "CERNOps",
   "summary": "This module is responsible for the installation, configuration, and deployment of TheHive application.",
   "license": "Apache-2.0",
-  "source": "https://gitlab.cern.ch/ai/it-puppet-module-thehive",
+  "source": "https://github.com/CERN-CERT/puppet-thehive",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib"
